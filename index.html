@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aggregated Weather</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Outfit', sans-serif;
+            /* Deep teal background matching the portfolio */
+            background: linear-gradient(135deg, #0f3d3e 0%, #071e1f 100%);
+            color: #ffffff;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 60px;
+            width: 90%;
+            max-width: 600px;
+            box-sizing: border-box;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            /*transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;*/
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 45px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .location {
+            font-size: 1.5rem; /* Increased font size */
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            color: #55c5a7; /* Minty teal accent matching portfolio links */
+        }
+
+        .temperature {
+            font-size: clamp(4rem, 15vw, 7rem);
+            font-weight: 600;
+            margin: 10px 0;
+            background: -webkit-linear-gradient(#fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            font-size: 1rem; /* Increased */
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem; /* Increased */
+            font-weight: 400;
+        }
+
+        .location-btn {
+            background: rgba(85, 197, 167, 0.2);
+            color: #55c5a7;
+            border: 1px solid rgba(85, 197, 167, 0.5);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .location-btn:hover {
+            background: rgba(85, 197, 167, 0.4);
+        }
+
+        .provider {
+            margin-top: 40px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="glass-card">
+        <button class="location-btn" onclick="requestLocation()">📍 Get Precise Weather</button>
+        <!-- Notice how we can inject variables right into the HTML! -->
+        <div class="location">{{ .City }}</div>
+        <div class="temperature">{{ printf "%.1f" .Temperature }}°</div>
+        
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-label">Humidity</span>
+                <span class="stat-value">{{ printf "%.1f" .Humidity }}%</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Precipitation</span>
+                <span class="stat-value">{{ printf "%.1f" .Precipitation }}mm</span>
+            </div>
+        </div>
+
+        <div class="provider">Data powered by {{ .Provider }}</div>
+    </div>
+
+    <script>
+        function requestLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    window.location.href = `/?lat=${position.coords.latitude}&lon=${position.coords.longitude}`;
+                }, function(error) {
+                    alert("Could not get your location.");
+                });
+            }
+        }
+    </script>
+</body>
+</html>

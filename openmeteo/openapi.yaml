@@ -1,0 +1,41 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Open-Meteo API
+components:
+  schemas:
+    ForecastResponse:
+      type: object
+      properties:
+        latitude:
+          type: number
+        longitude:
+          type: number
+        elevation:
+          type: number
+        timezone:
+          type: string
+        utc_offset_seconds:
+          type: number
+        current:
+          $ref: '#/components/schemas/CurrentWeather'
+    CurrentWeather:
+      type: object
+      properties:
+        temperature_2m:
+          type: number
+        relative_humidity_2m:
+          type: number
+        precipitation:
+          type: number
+paths:
+  /v1/forecast:
+    get:
+      summary: Get weather forecast
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForecastResponse'

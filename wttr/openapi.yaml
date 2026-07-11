@@ -1,0 +1,39 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Wttr.in API
+components:
+  schemas:
+    WttrResponse:
+      type: object
+      properties:
+        current_condition:
+          type: array
+          items:
+            $ref: '#/components/schemas/CurrentCondition'
+    CurrentCondition:
+      type: object
+      properties:
+        temp_C:
+          type: string
+        humidity:
+          type: string
+        precipMM:
+          type: string
+paths:
+  /{location}:
+    get:
+      summary: Get weather for a location
+      parameters:
+        - name: location
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WttrResponse'
