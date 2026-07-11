@@ -14,6 +14,10 @@ import (
 var htmlTemplate string
 
 func WeatherHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == "/favicon.ico" {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
 	latStr, lonStr := r.URL.Query().Get("lat"), r.URL.Query().Get("lon")
 	remoteAddr := r.RemoteAddr
 	tmpl, _ := template.New("index").Parse(htmlTemplate)

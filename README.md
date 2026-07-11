@@ -44,7 +44,7 @@ CACHE_EXPIRY_SECONDS="900"
 ```
 3. Spin up the local development server:
 ```bash
-go run main.go
+go run local_server.go
 ```
 4. Visit `http://localhost:8080` in your browser.
 
