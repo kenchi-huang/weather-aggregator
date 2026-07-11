@@ -6,23 +6,14 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"sync"
-	"time"
 
 	"github.com/kenchi-huang/weather-aggregator/client/location"
 	"github.com/kenchi-huang/weather-aggregator/client/openmeteo"
+	"github.com/kenchi-huang/weather-aggregator/client/upstash"
 	"github.com/kenchi-huang/weather-aggregator/client/wttr"
 	"github.com/kenchi-huang/weather-aggregator/service/aggregator"
 	"github.com/kenchi-huang/weather-aggregator/weather"
 )
-
-type CacheEntry struct {
-	Weather *weather.Weather
-	Expiry  time.Time
-}
-
-var cache = make(map[string]CacheEntry)
-var cacheMutex sync.RWMutex
 
 func GetWeatherForUser(lat string, lon string, remoteAddr string) (*weather.Weather, error) {
 	latFloat, _ := strconv.ParseFloat(lat, 64)
@@ -64,13 +55,15 @@ func GetWeatherForUser(lat string, lon string, remoteAddr string) (*weather.Weat
 	}
 
 	cacheKey := fmt.Sprintf("%.2f,%.2f", locationData.Lat, locationData.Lon)
-	cacheMutex.RLock()
-	entry, exists := cache[cacheKey]
-	cacheMutex.RUnlock()
+	cacheData, err := upstash.ReadCache(cacheKey)
+	if err != nil {
+		log.Println(err)
+		// continue and try and get the user the weather data
+	}
 
-	if exists && time.Now().Before(entry.Expiry) {
+	if cacheData != nil {
 		fmt.Println("Serving from cache! 🚀")
-		return entry.Weather, nil
+		return cacheData, nil
 	}
 
 	providers := []weather.Provider{
@@ -91,12 +84,10 @@ func GetWeatherForUser(lat string, lon string, remoteAddr string) (*weather.Weat
 
 	aggregatedWeather := aggregator.BuildAggregatedWeather(conditions, locationData)
 
-	cacheMutex.Lock()
-	cache[cacheKey] = CacheEntry{
-		Weather: &aggregatedWeather,
-		Expiry:  time.Now().Add(time.Hour * 1),
+	err = upstash.WriteCache(cacheKey, &aggregatedWeather)
+	if err != nil {
+		return &aggregatedWeather, err
 	}
-	cacheMutex.Unlock()
 
 	return &aggregatedWeather, nil
 }
