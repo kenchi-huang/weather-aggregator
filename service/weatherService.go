@@ -9,11 +9,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/kenchi-huang/weather-aggregator/aggregator"
-	"github.com/kenchi-huang/weather-aggregator/location"
-	"github.com/kenchi-huang/weather-aggregator/openmeteo"
+	"github.com/kenchi-huang/weather-aggregator/client/location"
+	"github.com/kenchi-huang/weather-aggregator/client/openmeteo"
+	"github.com/kenchi-huang/weather-aggregator/client/wttr"
+	"github.com/kenchi-huang/weather-aggregator/service/aggregator"
 	"github.com/kenchi-huang/weather-aggregator/weather"
-	"github.com/kenchi-huang/weather-aggregator/wttr"
 )
 
 type CacheEntry struct {

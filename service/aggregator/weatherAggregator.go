@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/kenchi-huang/weather-aggregator/location"
+	"github.com/kenchi-huang/weather-aggregator/client/location"
 	"github.com/kenchi-huang/weather-aggregator/weather"
 )
 
