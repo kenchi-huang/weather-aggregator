@@ -17,10 +17,13 @@ func (c Client) GetWeather(lat float64, lon float64) (*weather.Weather, error) {
 	var data WttrResponse
 	if err != nil {
 		return nil, err
-	} else {
-		defer res.Body.Close()
-		jsonFile, _ := io.ReadAll(res.Body)
-		json.Unmarshal(jsonFile, &data)
+	}
+	defer res.Body.Close()
+
+	jsonFile, _ := io.ReadAll(res.Body)
+	err = json.Unmarshal(jsonFile, &data)
+	if err != nil {
+		return nil, err
 	}
 
 	condition := (*data.CurrentCondition)[0]

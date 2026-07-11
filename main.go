@@ -94,7 +94,10 @@ func weatherHandler(w http.ResponseWriter, r *http.Request) {
 		City:          locationData.City,
 	}
 	tmpl, _ := template.ParseFiles("index.html")
-	tmpl.Execute(w, aggregatedWeather)
+	err := tmpl.Execute(w, aggregatedWeather)
+	if err != nil {
+		return
+	}
 }
 
 func main() {
@@ -103,7 +106,10 @@ func main() {
 		log.Println("No .env file found, assuming in production mode")
 	}
 	http.HandleFunc("/", weatherHandler)
-	http.ListenAndServe(":8080", nil)
+	err = http.ListenAndServe(":8080", nil)
+	if err != nil {
+		return
+	}
 }
 
 type location struct {
@@ -127,12 +133,15 @@ func getCoordinatesFromIp(ip string) (*locationDataFromIp, error) {
 	var data locationDataFromIp
 	if err != nil {
 		return nil, err
-	} else {
-		defer res.Body.Close()
-		jsonFile, _ := io.ReadAll(res.Body)
-		json.Unmarshal(jsonFile, &data)
-		return &data, nil
 	}
+
+	defer res.Body.Close()
+	jsonFile, _ := io.ReadAll(res.Body)
+	err = json.Unmarshal(jsonFile, &data)
+	if err != nil {
+		return nil, err
+	}
+	return &data, nil
 }
 
 type locationDataFromCoordinates struct {
@@ -148,10 +157,13 @@ func getLocationFromCoordinates(lat float64, lon float64) (*locationDataFromCoor
 	var data locationDataFromCoordinates
 	if err != nil {
 		return nil, err
-	} else {
-		defer res.Body.Close()
-		jsonFile, _ := io.ReadAll(res.Body)
-		json.Unmarshal(jsonFile, &data)
-		return &data, nil
 	}
+
+	defer res.Body.Close()
+	jsonFile, _ := io.ReadAll(res.Body)
+	err = json.Unmarshal(jsonFile, &data)
+	if err != nil {
+		return nil, err
+	}
+	return &data, nil
 }
