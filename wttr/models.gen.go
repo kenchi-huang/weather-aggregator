@@ -5,12 +5,29 @@ package wttr
 
 // CurrentCondition defines model for CurrentCondition.
 type CurrentCondition struct {
-	Humidity *string `json:"humidity,omitempty"`
-	PrecipMM *string `json:"precipMM,omitempty"`
-	TempC    *string `json:"temp_C,omitempty"`
+	Humidity    *string `json:"humidity,omitempty"`
+	PrecipMM    *string `json:"precipMM,omitempty"`
+	TempC       *string `json:"temp_C,omitempty"`
+	WeatherCode *string `json:"weatherCode,omitempty"`
+}
+
+// WeatherDay defines model for WeatherDay.
+type WeatherDay struct {
+	Date     *string        `json:"date,omitempty"`
+	Hourly   *[]WeatherHour `json:"hourly,omitempty"`
+	MaxtempC *string        `json:"maxtempC,omitempty"`
+	MintempC *string        `json:"mintempC,omitempty"`
+}
+
+// WeatherHour defines model for WeatherHour.
+type WeatherHour struct {
+	TempC       *string `json:"tempC,omitempty"`
+	Time        *string `json:"time,omitempty"`
+	WeatherCode *string `json:"weatherCode,omitempty"`
 }
 
 // WttrResponse defines model for WttrResponse.
 type WttrResponse struct {
 	CurrentCondition *[]CurrentCondition `json:"current_condition,omitempty"`
+	Weather          *[]WeatherDay       `json:"weather,omitempty"`
 }

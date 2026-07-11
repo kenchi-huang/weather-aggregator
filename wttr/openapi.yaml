@@ -11,6 +11,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CurrentCondition'
+        weather:
+          type: array
+          items:
+            $ref: '#/components/schemas/WeatherDay'
     CurrentCondition:
       type: object
       properties:
@@ -19,6 +23,30 @@ components:
         humidity:
           type: string
         precipMM:
+          type: string
+        weatherCode:
+          type: string
+    WeatherDay:
+      type: object
+      properties:
+        date:
+          type: string
+        maxtempC:
+          type: string
+        mintempC:
+          type: string
+        hourly:
+          type: array
+          items:
+            $ref: '#/components/schemas/WeatherHour'
+    WeatherHour:
+      type: object
+      properties:
+        time:
+          type: string
+        tempC:
+          type: string
+        weatherCode:
           type: string
 paths:
   /{location}:

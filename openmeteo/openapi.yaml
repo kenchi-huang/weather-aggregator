@@ -19,6 +19,10 @@ components:
           type: number
         current:
           $ref: '#/components/schemas/CurrentWeather'
+        daily:
+          $ref: '#/components/schemas/DailyWeather'
+        hourly:
+          $ref: '#/components/schemas/HourlyWeather'
     CurrentWeather:
       type: object
       properties:
@@ -28,6 +32,42 @@ components:
           type: number
         precipitation:
           type: number
+        weather_code:
+          type: number
+    DailyWeather:
+      type: object
+      properties:
+        time:
+          type: array
+          items:
+            type: string
+        weather_code:
+          type: array
+          items:
+            type: number
+        temperature_2m_max:
+          type: array
+          items:
+            type: number
+        temperature_2m_min:
+          type: array
+          items:
+            type: number
+    HourlyWeather:
+      type: object
+      properties:
+        time:
+          type: array
+          items:
+            type: string
+        temperature_2m:
+          type: array
+          items:
+            type: number
+        weather_code:
+          type: array
+          items:
+            type: number
 paths:
   /v1/forecast:
     get:

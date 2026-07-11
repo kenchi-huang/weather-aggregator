@@ -8,14 +8,32 @@ type CurrentWeather struct {
 	Precipitation      *float32 `json:"precipitation,omitempty"`
 	RelativeHumidity2m *float32 `json:"relative_humidity_2m,omitempty"`
 	Temperature2m      *float32 `json:"temperature_2m,omitempty"`
+	WeatherCode        *float32 `json:"weather_code,omitempty"`
+}
+
+// DailyWeather defines model for DailyWeather.
+type DailyWeather struct {
+	Temperature2mMax *[]float32 `json:"temperature_2m_max,omitempty"`
+	Temperature2mMin *[]float32 `json:"temperature_2m_min,omitempty"`
+	Time             *[]string  `json:"time,omitempty"`
+	WeatherCode      *[]float32 `json:"weather_code,omitempty"`
 }
 
 // ForecastResponse defines model for ForecastResponse.
 type ForecastResponse struct {
 	Current          *CurrentWeather `json:"current,omitempty"`
+	Daily            *DailyWeather   `json:"daily,omitempty"`
 	Elevation        *float32        `json:"elevation,omitempty"`
+	Hourly           *HourlyWeather  `json:"hourly,omitempty"`
 	Latitude         *float32        `json:"latitude,omitempty"`
 	Longitude        *float32        `json:"longitude,omitempty"`
 	Timezone         *string         `json:"timezone,omitempty"`
 	UtcOffsetSeconds *float32        `json:"utc_offset_seconds,omitempty"`
+}
+
+// HourlyWeather defines model for HourlyWeather.
+type HourlyWeather struct {
+	Temperature2m *[]float32 `json:"temperature_2m,omitempty"`
+	Time          *[]string  `json:"time,omitempty"`
+	WeatherCode   *[]float32 `json:"weather_code,omitempty"`
 }
