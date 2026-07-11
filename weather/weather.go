@@ -53,7 +53,7 @@ func getIconClassFromCode(code int) string {
 	}
 }
 
-// Update the methods to return IconClass()
+// IconClass Update the methods to return IconClass()
 func (c CurrentWeather) IconClass() string { return getIconClassFromCode(c.ConditionCode) }
 func (f ForecastDay) IconClass() string    { return getIconClassFromCode(f.ConditionCode) }
 func (h ForecastHour) IconClass() string   { return getIconClassFromCode(h.ConditionCode) }
