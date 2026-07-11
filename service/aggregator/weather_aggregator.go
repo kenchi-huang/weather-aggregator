@@ -21,6 +21,7 @@ func BuildAggregatedWeather(conditions []weather.Weather, locationData location.
 		var totalDailyMinTemp float64
 		var totalDailyMaxTemp float64
 		var maxDailyConditionCode = 0
+		var currentDate string
 		timeBuckets := make(map[string][]float64)
 		conditionBuckets := make(map[string]int)
 		var providersForDay int
@@ -32,6 +33,7 @@ func BuildAggregatedWeather(conditions []weather.Weather, locationData location.
 			providersForDay++
 
 			daily := condition.Daily[d]
+			currentDate = daily.Date
 			totalDailyMinTemp += daily.MinTemp
 			totalDailyMaxTemp += daily.MaxTemp
 			maxDailyConditionCode = max(maxDailyConditionCode, daily.ConditionCode)
@@ -42,6 +44,10 @@ func BuildAggregatedWeather(conditions []weather.Weather, locationData location.
 					conditionBuckets[hour.Time] = hour.ConditionCode
 				}
 			}
+		}
+
+		if providersForDay == 0 {
+			continue
 		}
 
 		var aggregatedHours []weather.ForecastHour
@@ -68,7 +74,7 @@ func BuildAggregatedWeather(conditions []weather.Weather, locationData location.
 		}
 
 		aggregatedDaily = append(aggregatedDaily, weather.ForecastDay{
-			Date:          conditions[0].Daily[d].Date,
+			Date:          currentDate,
 			MinTemp:       totalDailyMinTemp / float64(providersForDay),
 			MaxTemp:       totalDailyMaxTemp / float64(providersForDay),
 			ConditionCode: maxDailyConditionCode,
