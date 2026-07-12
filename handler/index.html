@@ -311,7 +311,7 @@
         function requestLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
-                    window.location.href = `/?lat=${position.coords.latitude}&lon=${position.coords.longitude}`;
+                    window.location.href = window.location.pathname + `?lat=${position.coords.latitude}&lon=${position.coords.longitude}`;
                 }, function(error) {
                     alert("Could not get your location.");
                 });
